@@ -13,3 +13,10 @@ export type PlanetsType = {
   edited: string,
   url: string,
 };
+
+export type PlanetsSearched = {
+  count: number,
+  next: string,
+  previous: string,
+  results: PlanetsType[],
+};

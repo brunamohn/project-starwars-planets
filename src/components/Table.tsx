@@ -3,7 +3,10 @@ import { PlanetsContext } from '../context/planets-context';
 import { PlanetsType } from '../types/types';
 
 function Table() {
-  const { planets } = useContext(PlanetsContext);
+  const { planets, planetsSearched } = useContext(PlanetsContext);
+  const planetsToRender: PlanetsType[] = Array.isArray(planetsSearched)
+    && planetsSearched.length > 0 ? planetsSearched : planets;
+
   return (
     <table>
       <thead>
@@ -24,7 +27,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {planets.map((planet: PlanetsType) => (
+        {planetsToRender.map((planet: PlanetsType) => (
           <tr key={ planet.name }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>

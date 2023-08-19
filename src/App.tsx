@@ -1,12 +1,13 @@
 import './App.css';
-import PlanetsProvider from './context/planets-provider';
 import Table from './components/Table';
+import Header from './components/Header';
 
 function App() {
   return (
-    <PlanetsProvider>
+    <div>
+      <Header />
       <Table />
-    </PlanetsProvider>
+    </div>
   );
 }
 //
