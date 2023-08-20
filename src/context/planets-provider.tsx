@@ -80,7 +80,10 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
           searchedPlanets,
           planetsSearched,
           filterFeatures,
-          filtersOnScreen }
+          filtersOnScreen,
+          allFilters,
+          setAllFilters,
+          setFiltersOnScreen }
       }
     >
       {children}
