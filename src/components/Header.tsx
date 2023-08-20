@@ -10,7 +10,7 @@ const INICIAL_STATE = {
 function Header() {
   const [searchPlanets, setSearchPlanets] = useState('');
   const [form, setForm] = useState(INICIAL_STATE);
-  const { searchedPlanets, filterFeatures } = useContext(PlanetsContext);
+  const { searchedPlanets, filterFeatures, filtersOnScreen } = useContext(PlanetsContext);
 
   const handleChange = (e: any) => {
     const search = (e.target.value).toLowerCase();
@@ -52,11 +52,9 @@ function Header() {
           value={ form.column }
           onChange={ (e) => setForm({ ...form, column: e.target.value }) }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {filtersOnScreen.map((filter) => (
+            <option key={ filter } value={ filter }>{filter}</option>
+          ))}
         </select>
         <select
           name="operator"

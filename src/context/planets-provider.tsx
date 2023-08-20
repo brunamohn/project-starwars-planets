@@ -13,10 +13,19 @@ type FiltersType = {
   value: number,
 };
 
+const INICIAL_STATE_FILTERS = [
+  'population',
+  'orbital_period',
+  'diameter',
+  'rotation_period',
+  'surface_water',
+];
+
 function PlanetsProvider({ children }: PlanetsProviderProps) {
   const [planetsResult, setPlanetsResult] = useState<PlanetsType[]>([]);
   const [planetsSearched, setPlanetsSearched] = useState<PlanetsType[]>([]);
   const [allFilters, setAllFilters] = useState<FiltersType[]>([]);
+  const [filtersOnScreen, setFiltersOnScreen] = useState(INICIAL_STATE_FILTERS);
 
   useEffect(() => {
     const planetsFetch = async () => {
@@ -37,6 +46,8 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
     search: { column: keyof PlanetsType, operator: string, value: number },
   ) => {
     setAllFilters([...allFilters, search]);
+    const newFiltersList = filtersOnScreen.filter((filter) => filter !== search.column);
+    setFiltersOnScreen(newFiltersList);
   };
 
   useEffect(() => {
@@ -65,7 +76,11 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
   return (
     <PlanetsContext.Provider
       value={
-          { planets: planetsResult, searchedPlanets, planetsSearched, filterFeatures }
+        { planets: planetsResult,
+          searchedPlanets,
+          planetsSearched,
+          filterFeatures,
+          filtersOnScreen }
       }
     >
       {children}

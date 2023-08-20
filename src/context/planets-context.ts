@@ -6,6 +6,7 @@ export type PlanetsContextType = {
   searchedPlanets: (value: string) => void,
   planetsSearched: PlanetsType[],
   filterFeatures: (value: any) => void,
+  filtersOnScreen: string[],
 };
 
 export const PlanetsContext = createContext({} as PlanetsContextType);
