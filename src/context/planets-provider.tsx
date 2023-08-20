@@ -15,7 +15,6 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
     const planetsFetch = async () => {
       const response = await fetchPlanets();
       setPlanetsResult(response.results);
-      console.log(planetsResult);
     };
     planetsFetch();
   }, [planetsResult]);
@@ -25,13 +24,31 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
       (planet) => planet.name.toLowerCase().includes(search),
     );
     setPlanetsSearched(filteredPlanets);
-    console.log(planetsSearched);
+  };
+
+  const filterFeatures = (
+    search: { column: keyof PlanetsType, operator: string, value: number },
+  ) => {
+    const { column, operator, value } = search;
+    const filteredPlanets: PlanetsType[] = planetsResult.filter((planet) => {
+      if (operator === 'maior que') {
+        return Number(planet[column]) > Number(value);
+      }
+      if (operator === 'menor que') {
+        return Number(planet[column]) < Number(value);
+      }
+      if (operator === 'igual a') {
+        return Number(planet[column]) === Number(value);
+      }
+      return planet;
+    });
+    setPlanetsSearched(filteredPlanets);
   };
 
   return (
     <PlanetsContext.Provider
       value={
-          { planets: planetsResult, searchedPlanets, planetsSearched }
+          { planets: planetsResult, searchedPlanets, planetsSearched, filterFeatures }
       }
     >
       {children}
