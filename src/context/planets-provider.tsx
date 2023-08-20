@@ -7,9 +7,16 @@ type PlanetsProviderProps = {
   children: React.ReactNode;
 };
 
+type FiltersType = {
+  column: keyof PlanetsType,
+  operator: string,
+  value: number,
+};
+
 function PlanetsProvider({ children }: PlanetsProviderProps) {
   const [planetsResult, setPlanetsResult] = useState<PlanetsType[]>([]);
   const [planetsSearched, setPlanetsSearched] = useState<PlanetsType[]>([]);
+  const [allFilters, setAllFilters] = useState<FiltersType[]>([]);
 
   useEffect(() => {
     const planetsFetch = async () => {
@@ -29,21 +36,31 @@ function PlanetsProvider({ children }: PlanetsProviderProps) {
   const filterFeatures = (
     search: { column: keyof PlanetsType, operator: string, value: number },
   ) => {
-    const { column, operator, value } = search;
-    const filteredPlanets: PlanetsType[] = planetsResult.filter((planet) => {
-      if (operator === 'maior que') {
-        return Number(planet[column]) > Number(value);
-      }
-      if (operator === 'menor que') {
-        return Number(planet[column]) < Number(value);
-      }
-      if (operator === 'igual a') {
-        return Number(planet[column]) === Number(value);
-      }
-      return planet;
-    });
-    setPlanetsSearched(filteredPlanets);
+    setAllFilters([...allFilters, search]);
   };
+
+  useEffect(() => {
+    let shownPlanets = planetsResult;
+    allFilters.forEach((filter) => {
+      if (filter.operator === 'maior que') {
+        shownPlanets = shownPlanets.filter(
+          (planet) => Number(planet[filter.column]) > Number(filter.value),
+        );
+      }
+      if (filter.operator === 'menor que') {
+        shownPlanets = shownPlanets.filter(
+          (planet) => Number(planet[filter.column]) < Number(filter.value),
+        );
+      }
+      if (filter.operator === 'igual a') {
+        shownPlanets = shownPlanets.filter(
+          (planet) => Number(planet[filter.column]) === Number(filter.value),
+        );
+      }
+      return shownPlanets;
+    });
+    setPlanetsSearched(shownPlanets);
+  }, [allFilters, planetsResult]);
 
   return (
     <PlanetsContext.Provider

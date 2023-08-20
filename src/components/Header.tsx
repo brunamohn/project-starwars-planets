@@ -26,6 +26,7 @@ function Header() {
       value: form.number,
     };
     filterFeatures(newSerch);
+    setForm(INICIAL_STATE);
   };
 
   useEffect(() => {
